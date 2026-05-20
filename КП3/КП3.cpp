@@ -40,6 +40,14 @@ void YDiraction();
 const int HEIGTH = 65;
 const int WIDTH = 189;
 const int AREA = WIDTH * HEIGTH;
+
+const int ENEMYHEIGTH = HEIGTH - 16;//7,16-7
+const int ENEMYWIDTH = WIDTH - 11;
+
+const int UPDELAY = 7+1;
+const int DOWNDELAY = 9+1;
+const int RIGHTDELAY = 11+1;
+const int LEFTDELAY = 1 + 1;
 //поменять фон для консоли
 wchar_t minimap[HEIGTH][WIDTH] = {
     L"############################################################################################################################################################################################",
@@ -212,8 +220,8 @@ string getPresentDateTime()
 //int damage;
 //int direction;
 
-int posx;
-int posy;
+int posx = 93;
+int posy = 8;
 
 //struct controlPoint {
 //    int posx;
@@ -230,8 +238,10 @@ int CP_posy[CP_COUNT];
 
 void CPListing() {
     for (int i = 2; i < CP_COUNT; i++) {
-        CP_posx[i] = rand() % WIDTH;
-        CP_posx[i] = rand() % HEIGTH;
+        //CP_posx[i] = rand() % ((WIDTH - RIGHTDELAY) + LEFTDELAY + 1) + LEFTDELAY;
+        //CP_posy[i] = rand() % ((HEIGTH - DOWNDELAY) + UPDELAY + 1) + UPDELAY;
+        CP_posx[i] = rand() % 174;
+        CP_posy[i] = 8 + rand() % 48;
         //cout << CP_posx[i] << CP_posx[i] << endl;
     }
 }
@@ -246,6 +256,7 @@ void MoveEnemy(int dx, int dy) {
         posy = newY;
         minimap[posy][posx] = 'E';
     }
+
 }
 
 int minBuff;
@@ -254,6 +265,10 @@ const int NEARESTCPS = 2;
 
 int bufferX[NEARESTCPS];
 int bufferY[NEARESTCPS];
+
+int randomCP;
+int pointX;
+int pointY;
 
 void NearestCPCalculation() {
 
@@ -270,11 +285,12 @@ void NearestCPCalculation() {
         bufferX[j] = CP_posx[minBuff];
         bufferY[j] = CP_posy[minBuff];
     }
+    //вычисление целевой точки и направления движения (должно наступать глобально при нахождении на контрольной точке)
+    randomCP = rand() % (NEARESTCPS - 1);
+    pointX = bufferX[randomCP];//значения должны быть по одному индексу
+    pointY = bufferY[randomCP];
 }
-//вычисление целевой точки и направления движения (должно наступать глобально при нахождении на контрольной точке)
-int randomCP = rand() % (NEARESTCPS - 1);
-int pointX = bufferX[randomCP];//значения должны быть по одному индексу
-int pointY = bufferY[randomCP];
+
 
 void XDiraction() {
     if (pointX - posx > 0) {
@@ -285,10 +301,10 @@ void XDiraction() {
         //Left
         MoveEnemy(-1, 0);
     }
-    else {
-        //YDir
-        YDiraction();
-    }
+    //else {
+    //    //YDir
+    //    YDiraction();
+    //}
 }
 
 void YDiraction() {
@@ -300,18 +316,24 @@ void YDiraction() {
         //Down
         MoveEnemy(0, 1);
     }
-    else {
-        //XDir
-        XDiraction();
-    }
+    //else {
+    //    //XDir
+    //    XDiraction();
+    //}
 }
 void DiractionCalculation() {
+    //if (pointX - posx == 0 && pointY - posy == 0) {
+    //    NearestCPCalculation();
+    //}
 
+    if (pointX - posx < pointY - posy) {
+        YDiraction();
+    }
     if (pointX - posx > pointY - posy) {
         XDiraction();
     }
     else {
-        YDiraction();
+        NearestCPCalculation();
     }
 
 }
@@ -360,6 +382,7 @@ void movePlayer(int dx, int dy) {
 
 int main()
 {
+    //для оптимизации вывода
     char buf[10000];
     setvbuf(stdout, buf, _IOFBF, sizeof(buf));
     setlocale(LC_ALL, "ru");
@@ -388,14 +411,14 @@ int main()
             int ch = _getch();
             if (ch == 0 || ch == 224) {
                 ch = _getch();
+                DiractionCalculation();
                 switch (ch) {
                 case 72: movePlayer(0, -1); break;//вверх
                 case 80: movePlayer(0, 1); break;//вниз
                 case 75: movePlayer(-1, 0); break;//влево
                 case 77: movePlayer(1, 0); break;//вправо
                 }
-                NearestCPCalculation();
-                DiractionCalculation();
+                
                 drawmap();
             }
         }
