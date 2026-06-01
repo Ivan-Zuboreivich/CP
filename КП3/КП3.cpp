@@ -369,7 +369,15 @@ void drawmap() {
 void movePlayer(int dx, int dy) {
     int newX = Pposx + dx;
     int newY = Pposy + dy;
-
+    if (minimap[newY][newX] == 'X') {
+        if (lastSpace == 8) {
+            GetItem();
+            minimap[Pposy][Pposx] = ' ';
+            Pposx = newX;
+            Pposy = newY;
+            minimap[Pposy][Pposx] = 'p';
+        }
+    }
     if (minimap[newY][newX] == ' ') {
         minimap[Pposy][Pposx] = ' ';
         Pposx = newX;
@@ -377,7 +385,42 @@ void movePlayer(int dx, int dy) {
         minimap[Pposy][Pposx] = 'p';
     }
 }
+struct Item {
+    string name;
+    int cost;
+    int type;
+};
+const int ALLITEMS = 20;
+const int ITEMSONGROUND = 10;
 
+Item inventory[9];
+int lastSpace = 0;
+Item itemlist[ALLITEMS];
+
+int I_posx[ITEMSONGROUND];
+int I_posy[ITEMSONGROUND];
+
+//void ItemCheckpickUp(int X, int Y) {
+//
+//}
+void ClearInventory() {
+
+}
+void GetItem() {
+    int randItemID = rand() % ALLITEMS;
+    inventory[lastSpace] = itemlist[randItemID];
+}
+void ItemSpawning(){
+    for (int i = 0; i < ITEMSONGROUND; i++) {
+        minimap[I_posy[i]][I_posx[i]] = 'X';
+    }
+}
+void ItemsListing() {
+    for (int i = 0; i < ITEMSONGROUND; i++) {
+        I_posx[i] = rand() % 174;
+        I_posy[i] = 8 + rand() % 48;
+    }
+}
 
 
 int main()
@@ -401,6 +444,7 @@ int main()
     MoveWindow(hWindowConsole, r.left, r.top, 1920, 1080, TRUE);
 
     CPListing();
+
     hideCursor();
     drawmap();
 
