@@ -1,4 +1,4 @@
 ﻿  КП3.cpp
-C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(349,19): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
-C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(349,22): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
+C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(340,19): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
+C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(340,22): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
   КП3.vcxproj -> C:\Users\ivanz\source\repos\КП3\x64\Debug\КП3.exe
