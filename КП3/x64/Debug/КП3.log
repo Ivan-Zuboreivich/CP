@@ -1,4 +1,5 @@
 ﻿  КП3.cpp
-C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(357,19): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
-C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(357,22): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
+C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(287,19): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
+C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(287,22): warning C4838: Преобразование из "int" в "SHORT" требует сужающего преобразования.
+C:\Users\ivanz\source\repos\КП3\КП3\КП3.cpp(419,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
   КП3.vcxproj -> C:\Users\ivanz\source\repos\КП3\x64\Debug\КП3.exe

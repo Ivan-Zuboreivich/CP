@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <string>
+
 //
 #include <windows.h>
 #include <conio.h>
@@ -12,7 +13,8 @@
 //
 #include <io.h>
 #include <fcntl.h>
-
+//
+#include <fstream>
 using namespace std;
 using namespace std::chrono;
 
@@ -98,10 +100,10 @@ string minimap[HEIGTH] = {
     "#                                                                                                                                                                                          #",
     "#                                                                                                                                                                                          #",
     "#                                                                                                                                                                                          #",
-    "#                                                                                                                                                                                          #",
-    "#                                                                                                                                                                                          #",
-    "#                                                                                                                                                                                          #",
-    "#                                                                                           p                                                                                              #",
+    "#                                                                                  ``````````````````                                                                                      #",
+    "#                                                                                  ``````````````````                                                                                      #",
+    "#                                                                                  ``````````````````                                                                                      #",
+    "#                                                                                  ``````````````````                                                                                      #",
     "############################################################################################################################################################################################"
 };
 //5*10 размер блока
@@ -140,79 +142,7 @@ string getPresentDateTime()
 
 //поменять размер шрифта
 
-//HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);  // Получить консоль
-//
-//CONSOLE_FONT_INFOEX fontInfo;
-//GetCurrentConsoleFontEx(hConsole, TRUE, &fontInfo); // Получить текущий шрифт
-//
-//// Поменять какие-то параметры
-//wcsncpy(L"Arial Cyr", fontInfo.FaceName, LF_FACESIZE);  // Имя
-//fontInfo.dwFontSize.X = 10; // Размер (в логических единицах)
-//
-//SetCurrentConsoleFontEx(hConsole, TRUE, &fontInfo); // Установить новый
-// 
-// 
-// ▒ ▒#░▉◧▣◀☘☙
 
-//тесты всякой шняги
-
-//int wmain(int argc, wchar_t* argv[])
-//{
-//    _setmode(_fileno(stdout), _O_U16TEXT);
-//    _setmode(_fileno(stdin), _O_U16TEXT);
-//    _setmode(_fileno(stderr), _O_U16TEXT);
-//
-//    std::wcout << L"Unicode -- English -- Русский -- ░#▒▮ -- Español." << std::endl;
-//    // или
-//    wprintf(L"%s", L"Unicode -- English -- Русский -- Ελληνικά -- Español.\n");
-//
-//    //std::cout << 5;            // или printf("%d", 5);
-//    //std::wcout << L"▮▮▮";
-//
-//    return 0;
-//
-//    // или wprintf(L"%s", L"привет");
-//}
-//Чтобы автоматически закрывать консоль при остановке отладки, включите параметр "Сервис" ->"Параметры" ->"Отладка" -> "Автоматически закрыть консоль при остановке отладки".12345678901234567
-//int main() {
-//    setlocale(LC_ALL, "ru");
-//    _setmode(_fileno(stdout), _O_U16TEXT);
-//    _setmode(_fileno(stdin), _O_U16TEXT);
-//    _setmode(_fileno(stderr), _O_U16TEXT);
-//    char32_t tasd = L'▉';
-//    
-//    wstring rrr = L" ▒ ▒#░▉";
-//    //wprintf(L"%s",rrr);
-//    wcout << rrr << endl;
-//    int seconds;
-//    HANDLE hWnd = GetStdHandle(STD_OUTPUT_HANDLE);
-//    COORD bufferSize = { 1920, 1080 };
-//    HWND hWindowConsole = GetConsoleWindow();
-//    RECT r;
-//    system("color F0");
-//    GetWindowRect(hWindowConsole, &r); //stores the console's current dimensions
-//    MoveWindow(hWindowConsole, r.left, r.top, 1920, 1080, TRUE);
-//
-//    //wcout << "Enter total number seconds for the counter ▒ ▒#░▉◧▣◀☘☙" << endl;
-//    //cin >> seconds;
-//    //while (seconds >= 1) {
-//    //    // Print the current value of the counter along with
-//    //    // the present date and time.
-//    //    cout << "Time Remaining : " << seconds
-//    //        << " : " + getPresentDateTime() << endl;
-//
-//    //    // Pause the program execution for 1 second.
-//    //    this_thread::sleep_for(chrono::seconds(1));
-//
-//    //    // Decrement the counter.
-//    //    seconds--;
-//    //}
-//    //cout << "Time's Up!" << endl;
-//
-//    //return 0;
-//
-//    //SetConsoleScreenBufferSize(hWindowConsole, bufferSize);
-//}
 //enemy
 
 //int HP;
@@ -337,6 +267,8 @@ void DiractionCalculation() {
     }
 
 }
+void debuginf();
+void debuginf(bool T);
 
 //player
 int PHP = 2;
@@ -349,7 +281,7 @@ int money = 0;
 int timer = 0;
 
 
-void GetItem();
+void GetItem(int x, int y );
 
 int lastSpace = 0;
 
@@ -374,6 +306,7 @@ void debuginf() {
     cout << "|||" << Pposx << "|" << Pposy << endl;
     
 }
+
 void drawAlert() {
     cout << alert[1] << endl;
     cout << alert[1] << endl;
@@ -396,7 +329,7 @@ void drawmap() {
 
     }
     drawAlert();
-    debuginf();
+    //debuginf(true);
     gotoxy(0, 0);
 }
 void movePlayer(int dx, int dy) {
@@ -404,7 +337,7 @@ void movePlayer(int dx, int dy) {
     int newY = Pposy + dy;
     if (minimap[newY][newX] == 'X') {
         if (lastSpace != 8) {
-            GetItem();
+            GetItem(newX,newY);
             minimap[Pposy][Pposx] = ' ';
             Pposx = newX;
             Pposy = newY;
@@ -413,6 +346,13 @@ void movePlayer(int dx, int dy) {
     }
     if (minimap[newY][newX] == ' ') {
         minimap[Pposy][Pposx] = ' ';
+        Pposx = newX;
+        Pposy = newY;
+        minimap[Pposy][Pposx] = 'p';
+    }
+    if (minimap[newY][newX] == '`') {
+        ClearInventory();
+        minimap[Pposy][Pposx] = '`';
         Pposx = newX;
         Pposy = newY;
         minimap[Pposy][Pposx] = 'p';
@@ -439,11 +379,12 @@ int I_posy[ITEMSONGROUND];
 void ClearInventory() {
 
 }
-void GetItem() {
+void GetItem(int x, int y) {
     int randItemID = rand() % (ALLITEMS-1);
     inventory[lastSpace] = itemlist[randItemID];
+    lastSpace += 1;
     for (int i = 0; i < ITEMSONGROUND; i++) {
-        if (I_posx[i] == Pposx && I_posy[i] == Pposy) {
+        if (I_posx[i] == x && I_posy[i] == y) {
             I_posx[i] = rand() % WIDTH;
             I_posy[i] = rand() % HEIGTH;
            
@@ -466,6 +407,45 @@ void ItemsListing() {
 }
 
 
+
+void ItemsValueListing() {
+    ifstream itemss("Items.txt");
+    string items;
+    getline(itemss, items);
+    ifstream costss("Costs.txt");
+    string costs;
+    getline(costss, costs);
+    for (int i = 0; i < ALLITEMS; i++) {
+        string line;
+        int j = 0;
+        for (;; j++) {
+            if (items[j] == ',') { break; }
+            line += items[j];
+        }
+        itemlist[i].name = line;
+    }
+    for (int i = 0; i < ALLITEMS; i++) {
+        string line;
+        int j = 0;
+        for (;; j++) {
+            if (costs[j] == ',') { break; }
+            line += costs[j];
+        }
+        itemlist[i].cost = to_integer(line);
+    }
+    itemss.close();
+    costss.close();
+}
+void debuginf(bool T) {
+    for (int i = 0; i < CP_COUNT; i++) {
+        cout << I_posx[i] << "|" << I_posy[i] << endl;
+
+    }
+    cout << pointX << "|" << pointY << endl;
+    cout << "|||" << Pposx << "|" << Pposy << endl;
+
+}
+
 int main()
 {
     //для оптимизации вывода
@@ -476,7 +456,7 @@ int main()
     //_setmode(_fileno(stdout), _O_U16TEXT);
     //_setmode(_fileno(stdin), _O_U16TEXT);
     //_setmode(_fileno(stderr), _O_U16TEXT);
-
+    srand(time(NULL));
     //Изменение окна консоли (что-то из этого не работает)
     HANDLE hWnd = GetStdHandle(STD_OUTPUT_HANDLE);
     COORD bufferSize = { 1920, 1080 };
@@ -508,8 +488,9 @@ int main()
                 case 75: movePlayer(-1, 0); break;//влево
                 case 77: movePlayer(1, 0); break;//вправо
                 }
-                ItemSpawning();
+                
                 drawmap();
+                ItemSpawning();
             }
         }
     }
@@ -564,22 +545,3 @@ int main()
     //}
 }
 
-
-//if (GetKeyState('A') & 0x8000) {
-//    test = 'a';
-//    movePlayer(-1, 0);//levo
-//}
-//if (GetKeyState('W') & 0x8000) {
-//    test = 'w';
-//    movePlayer(0, -1);//vpered
-//}
-//if (GetKeyState('S') & 0x8000) {
-//    test = 's';
-//    movePlayer(0, 1);//nazad
-//}
-//if (GetKeyState('D') & 0x8000) {
-//    test = 'd';
-//    movePlayer(1, 0);//pravo
-//}
-//drawmap();
-//    }
