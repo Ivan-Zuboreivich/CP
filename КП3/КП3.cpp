@@ -105,7 +105,20 @@ string minimap[HEIGTH] = {
     "############################################################################################################################################################################################"
 };
 //5*10 размер блока
-
+const string alert[12] = {                                                                                                              
+    "#                                                            #                                                               #                                                             #",
+    "#                                                            #                                                               #                                                             #",
+    "#     MONEY: {:04}                                           #                                                               #                                                             #",
+    "#                                                            #                                                               #                                                             #",
+    "#     HP: {:04}                                              #                                                               #                                                             #",
+    "#                                                            #                                                               #                                                             #",
+    "#     TIME: {:04}                                            #                                                               #                                                             #",
+    "#                                                            #                                                               #                                                             #",
+    "#     INVENTORY: {:04}                                       #                                                               #                                                             #",
+    "#                                                            #                                                               #                                                             #",
+    "#                                                            #                                                               #                                                             #",
+    "############################################################################################################################################################################################",
+};
 
 // Function to get the current date and time as a string.
 string getPresentDateTime()
@@ -332,6 +345,10 @@ int PHP = 2;
 int Pposx = 92;
 int Pposy = 50;
 
+int money = 0;
+int timer = 0;
+
+
 void GetItem();
 
 int lastSpace = 0;
@@ -348,6 +365,40 @@ void hideCursor() {
     info.bVisible;
     SetConsoleCursorInfo(hConsole, &info);
 }
+void debuginf() {
+    for (int i = 0; i < CP_COUNT; i++) {
+        cout << CP_posx[i] << "|" << CP_posy[i] << endl;
+
+    }
+    cout << pointX << "|" << pointY << endl;
+    cout << "|||" << Pposx << "|" << Pposy << endl;
+    
+}
+void drawAlert() {
+    string curLine;
+    for (int i = 0; i < 12; i++) {
+        curLine = alert[i];
+        
+        //cout << format(curLine, PHP);
+        //cout << format(curLine, timer);
+        //cout << format(curLine, lastSpace);
+        if (i == 2) {
+            cout << vformat(curLine, make_format_args(money));
+        }
+        if (i == 4) {
+            cout << vformat(curLine, make_format_args(PHP));
+        }
+        if (i == 6) {
+            cout << vformat(curLine, make_format_args(timer));
+        }
+        if (i == 8) {
+            cout << vformat(curLine, make_format_args(lastSpace));
+        }
+        else{ cout << alert[i] << endl; }
+        
+
+    }
+}
 void drawmap() {
     
     //cout << "test" << endl;
@@ -355,19 +406,15 @@ void drawmap() {
         cout << minimap[i] << endl;
 
     }
-    for (int i = 0; i < CP_COUNT; i++) {
-        cout << CP_posx[i] <<"|"<<CP_posy[i] << endl;
-        
-    }
-    cout << pointX << "|" << pointY << endl;
-    cout << "|||"<<Pposx << "|" << Pposy << endl;
+    drawAlert();
+    debuginf();
     gotoxy(0, 0);
 }
 void movePlayer(int dx, int dy) {
     int newX = Pposx + dx;
     int newY = Pposy + dy;
     if (minimap[newY][newX] == 'X') {
-        if (lastSpace == 8) {
+        if (lastSpace != 8) {
             GetItem();
             minimap[Pposy][Pposx] = ' ';
             Pposx = newX;
@@ -404,8 +451,17 @@ void ClearInventory() {
 
 }
 void GetItem() {
-    int randItemID = rand() % ALLITEMS;
+    int randItemID = rand() % (ALLITEMS-1);
     inventory[lastSpace] = itemlist[randItemID];
+    for (int i = 0; i < ITEMSONGROUND; i++) {
+        if (I_posx[i] == Pposx && I_posy[i] == Pposy) {
+            I_posx[i] = rand() % WIDTH;
+            I_posy[i] = rand() % HEIGTH;
+           
+            
+        }
+    }
+
 }
 void ItemSpawning(){
     for (int i = 0; i < ITEMSONGROUND; i++) {
@@ -415,8 +471,8 @@ void ItemSpawning(){
 void ItemsListing() {
 
     for (int i = 0; i < ITEMSONGROUND; i++) {
-        I_posx[i] = rand() % 174;
-        I_posy[i] = 8 + rand() % 48;
+        I_posx[i] = rand() % WIDTH;
+        I_posy[i] = rand() % HEIGTH;
     }
 }
 
@@ -443,6 +499,9 @@ int main()
 
     CPListing();
 
+    ItemsListing();
+    ItemSpawning();
+
     hideCursor();
     drawmap();
 
@@ -460,7 +519,7 @@ int main()
                 case 75: movePlayer(-1, 0); break;//влево
                 case 77: movePlayer(1, 0); break;//вправо
                 }
-                
+                ItemSpawning();
                 drawmap();
             }
         }
