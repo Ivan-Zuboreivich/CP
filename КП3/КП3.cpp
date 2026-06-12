@@ -108,13 +108,13 @@ string minimap[HEIGTH] = {
 const string alert[12] = {                                                                                                              
     "#                                                            #                                                               #                                                             #",
     "#                                                            #                                                               #                                                             #",
-    "#     MONEY: {:04}                                           #                                                               #                                                             #",
+    "#     MONEY: {:04}                                            #                                                               #                                                             #",
     "#                                                            #                                                               #                                                             #",
-    "#     HP: {:04}                                              #                                                               #                                                             #",
+    "#     HP: {:04}                                               #                                                               #                                                             #",
     "#                                                            #                                                               #                                                             #",
-    "#     TIME: {:04}                                            #                                                               #                                                             #",
+    "#     TIME: {:04}                                             #                                                               #                                                             #",
     "#                                                            #                                                               #                                                             #",
-    "#     INVENTORY: {:04}                                       #                                                               #                                                             #",
+    "#     INVENTORY: {:04}                                        #                                                               #                                                             #",
     "#                                                            #                                                               #                                                             #",
     "#                                                            #                                                               #                                                             #",
     "############################################################################################################################################################################################",
@@ -375,29 +375,18 @@ void debuginf() {
     
 }
 void drawAlert() {
-    string curLine;
-    for (int i = 0; i < 12; i++) {
-        curLine = alert[i];
-        
-        //cout << format(curLine, PHP);
-        //cout << format(curLine, timer);
-        //cout << format(curLine, lastSpace);
-        if (i == 2) {
-            cout << vformat(curLine, make_format_args(money));
-        }
-        if (i == 4) {
-            cout << vformat(curLine, make_format_args(PHP));
-        }
-        if (i == 6) {
-            cout << vformat(curLine, make_format_args(timer));
-        }
-        if (i == 8) {
-            cout << vformat(curLine, make_format_args(lastSpace));
-        }
-        else{ cout << alert[i] << endl; }
-        
-
-    }
+    cout << alert[1] << endl;
+    cout << alert[1] << endl;
+    cout << vformat(alert[2], make_format_args(money)) << endl;
+    cout << alert[1] << endl;
+    cout << vformat(alert[4], make_format_args(PHP)) << endl;
+    cout << alert[1] << endl;
+    cout << vformat(alert[6], make_format_args(timer)) << endl;
+    cout << alert[1] << endl;
+    cout << vformat(alert[8], make_format_args(lastSpace)) << endl;
+    cout << alert[1] << endl;
+    cout << alert[1] << endl;
+    cout << alert[11];
 }
 void drawmap() {
     
